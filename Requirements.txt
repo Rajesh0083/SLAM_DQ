@@ -1,0 +1,15 @@
+# === Core packages ===
+pandas>=2.0.0
+numpy>=1.25.0
+openpyxl>=3.1.0
+pyyaml>=6.0
+python-dateutil>=2.9.0
+
+# === UI and visualization ===
+streamlit>=1.30.0
+plotly>=5.20.0
+
+# === Optional utilities ===
+tqdm>=4.66.0
+xlrd>=2.0.1
+
