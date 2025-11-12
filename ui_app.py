@@ -121,8 +121,27 @@ if run_validation:
                     st.success(f"✅ Loaded '{uploaded_file.name}' successfully.")
                     st.dataframe(df.head(5))
 
-                    # --- Placeholder for validation logic ---
+                    # --- Run Financial Month Validation ---
+                    from rules.month_rule import FinancialMonthRule  # Local import to avoid circular dependencies
+                    st.info("🔍 Running Financial Month validation...")
+
+                    # Determine which month the file represents (parsed from filename)
+                    if file_month:
+                        rule = FinancialMonthRule(column_name="Financial Month", current_file_month=int(file_month))
+                        df = rule.validate(df)
+                        st.success("✅ Financial Month validation completed.")
+                    else:
+                        st.warning("⚠️ Could not determine current file month from filename. Rule skipped.")
+
+                    # --- Display summary ---
+                    if "Financial Month_Result" in df.columns:
+                        summary = df["Financial Month_Result"].value_counts().to_dict()
+                        st.write("📊 **Validation Summary:**")
+                        st.json(summary)
+                    
+                    # --- Save validated output ---
                     output_path = save_output(df, output_folder, uploaded_file.name)
+                    st.info(f"📁 Output saved at: {output_path}")
 
             except Exception as e:
                 st.error(f"❌ Error processing {uploaded_file.name}: {e}")
